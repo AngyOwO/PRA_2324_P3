@@ -104,6 +104,18 @@ class TableEntry {
 		friend bool operator!=(const TableEntry<V> &te1, const TableEntry<V> &te2){
 		}
 
+
+		/*-------------------------------------------------*/
+                /*                   operator<<                    */
+                /*-------------------------------------------------*/
+                /*                                                 */
+                /* DESCRIPCION:                                    */
+                /* Sobrecarga global del operador << para imprimir */
+                /* el contenido de la entrada (par clave-> valor)  */
+                /* por pantalla.                                   */
+                /*                                                 */
+                /*-------------------------------------------------*/
+
 		friend ostream&operator<<(ostream &out, const TableEntry<V> &te){
 		}
 
