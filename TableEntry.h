@@ -4,9 +4,10 @@
 #include <string>
 #include <ostream>
 
-template <typename V>
+
 using namespace std;
 
+template <typename V>
 class TableEntry {
 	public:
 		/*-------------------------------------------------*/
