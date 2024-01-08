@@ -5,18 +5,17 @@
 #include <stdexcept>
 #include "Dict.h"
 #include "TableEntry.h"
-
-#include "/home/alumno.upv.es/aespcor/W/PRA/Practica3/PRA_2324_P3/"
+#include "/home/alumno.upv.es.aespcor/W/PRA/Practica1/PRA_2324_P1/ListLinked.h"
 
 using namespace std;
 
 template <typename V>
-class HashTable: public Dict<V> {
+class HashTable : public Dict<V> {
 
 	private:
 
 		/*-------------------------------------------------*/
-                /*                       n                         */
+                /*                  n (atributo)                   */
                 /*-------------------------------------------------*/
                 /*                                                 */
                 /* DESCRIPCION:                                    */
@@ -29,7 +28,7 @@ class HashTable: public Dict<V> {
 
 
 		/*-------------------------------------------------*/
-                /*                      max                        */
+                /*                 max (atributo)                  */
                 /*-------------------------------------------------*/
                 /*                                                 */
                 /* DESCRIPCION:                                    */
@@ -42,7 +41,7 @@ class HashTable: public Dict<V> {
 
 
 		/*-------------------------------------------------*/
-                /*                   TableEntry                    */
+                /*           Tabla de cubetas (atributo)           */
                 /*-------------------------------------------------*/
                 /*                                                 */
                 /* DESCRIPCION:                                    */
@@ -53,11 +52,11 @@ class HashTable: public Dict<V> {
 		/*                                                 */
                 /*-------------------------------------------------*/
 
-		ListLinked<TableEntry<V>> *table;
+		ListLinked<TableEntry<V>>* table;
 
 
 		/*-------------------------------------------------*/
-                /*                       h                         */
+                /*                h (función hash)                 */
                 /*-------------------------------------------------*/
                 /*                                                 */
                 /* DESCRIPCION:                                    */
@@ -70,12 +69,84 @@ class HashTable: public Dict<V> {
                 /*-------------------------------------------------*/
 
 		int h(string key) {
+
+			int sumASCII = 0;
+
+			for (int i = 0; i < key.size(); i++){
+				sumASCII += int(key.at(i));
+			}
+
+			return sumASCII % capacity();
 		}
 
 	public:
 
+		/*-------------------- INSERT ---------------------*/
+		void insert(string key, V value) override {
+
+			int pos = h(key);
+			TableEntry<V> aux(key, value);
+
+			if ( (table[pos].search(aux) ) == -1) {
+				
+				table[pos].insert(table[pos].size(), aux);
+				n++;
+			}
+
+			else {
+				throw runtime_error("Key '" + key + "' already exits!");
+			}
+		}
 		/*-------------------------------------------------*/
-                /*                   HashTable                     */
+
+
+		/*-------------------- SEARCH ---------------------*/
+		V search(string key) override {
+
+			int pos = h(key);
+			TableEntry<V> aux(key);
+
+			int listPos = table[pos].search(aux);
+
+			if (listPos == -1) {
+				throw runtime_error("Key '" + key + "' not found!");
+			}
+
+			return table[pos].get(listPos).value;
+		}
+		/*-------------------------------------------------*/
+
+
+		/*-------------------- REMOVE ---------------------*/
+		V remove(string key) override {
+
+			int pos = h(key);
+			TableEntry<V> aux(key);
+
+			int listPos = table[pos].search(aux);
+
+			if (listPos == -1) { 
+				throw runtime_error("Key '" + key + "' not found!"); 
+			}
+
+			n--;
+
+			return table[pos].remove(listPos).value;
+		}
+		/*-------------------------------------------------*/
+
+
+		/*-------------------- ENTRIES --------------------*/
+		int entries() override {
+
+			return n;
+		}
+		/*-------------------------------------------------*/
+
+
+
+		/*-------------------------------------------------*/
+                /*             HashTable (constructor)             */
                 /*-------------------------------------------------*/
                 /*                                                 */
                 /* DESCRIPCION:                                    */
@@ -85,12 +156,16 @@ class HashTable: public Dict<V> {
                 /*                                                 */
                 /*-------------------------------------------------*/
 
-		HastTable(int size) {
+		HashTable(int size) {
+
+			this->n = 0;
+			this->max = size;
+			this->table = new ListLinked<TableEntry<V>>[size];
 		}
 
 
 		/*-------------------------------------------------*/
-                /*                  ~HashTable                     */
+                /*            ~HashTable (destructor)              */
                 /*-------------------------------------------------*/
                 /*                                                 */
                 /* DESCRIPCION:                                    */
@@ -101,6 +176,8 @@ class HashTable: public Dict<V> {
                 /*-------------------------------------------------*/
 
 		~HashTable() {
+
+			delete[] table;
 		}
 
 
@@ -114,15 +191,53 @@ class HashTable: public Dict<V> {
                 /*-------------------------------------------------*/
 
 		int capacity() {
-		}
 
-		friend ostream &operator<<(ostream &out, const HashTable<V> &th) {
-		}
-
-		V operator[](string key) {
+			return max;
 		}
 
 
+		/*-------------------------------------------------*/
+                /*                     operator<<                  */
+                /*-------------------------------------------------*/
+                /*                                                 */
+                /* DESCRIPCION:                                    */
+                /* Sobrecarga global del operador << para imprimir */
+                /* el contenido de la tabla hash por pantalla.     */
+                /*                                                 */
+                /*-------------------------------------------------*/
+
+		friend ostream& operator<< (ostream &out, const HashTable<V> &th) {
+
+			out << "HashTable [entries: " << (th.n) << ", capacity: " << (th.max) << "]" << endl;
+			out << "------------------------" << endl << endl;
+
+			for (int i = 0; i < (th.max); i++) {
+
+				out << "-- Cubeta " << i << " --" << endl << endl;
+				out << th.table[i] << endl << endl;
+			}
+
+			out << "-------------------------" << endl;
+
+			return out;
+		}
+
+
+		/*-------------------------------------------------*/
+                /*                     operator[]                  */
+                /*-------------------------------------------------*/
+                /*                                                 */
+                /* DESCRIPCION:                                    */
+                /* Sobrecarga del operador []. Devuelve el valor   */
+                /* correspondiente a key. Si no existe, lanza la   */
+		/* excepción runtime_error.            		   */
+                /*                                                 */
+                /*-------------------------------------------------*/
+
+		V operator[] (string key) {
+
+			return search(key);
+		}
 
 };
 
