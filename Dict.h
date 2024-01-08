@@ -2,9 +2,9 @@
 #define DICT_H
 #include <string>
 
-template <typename V>
 using namespace std;
 
+template <typename V>
 class Dict {
 	public:
 		/*-------------------------------------------------*/
@@ -33,7 +33,7 @@ class Dict {
 		/*						   */
 		/*-------------------------------------------------*/
 
-		virtual V search(string key) = 0
+		virtual V search(string key) = 0;
 
 
 		/*-------------------------------------------------*/
