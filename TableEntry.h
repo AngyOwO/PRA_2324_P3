@@ -34,7 +34,7 @@ class TableEntry {
 
 
 		/*-------------------------------------------------*/
-		/*		      TableEntry  		   */
+		/*		TableEntry (constructor1)	   */
 		/*-------------------------------------------------*/
 		/*						   */
 		/* DESCRIPCION:					   */
@@ -43,11 +43,14 @@ class TableEntry {
 		/*-------------------------------------------------*/
 
 		TableEntry(string key, V value){
+
+			this->key = key;
+			this->value = value;
 		}
 
 
 		/*-------------------------------------------------*/
-		/*		      TableEntry		   */
+		/*		TableEntry (constructor2)	   */
 		/*-------------------------------------------------*/
 		/*						   */
 		/* DESCRIPCION:					   */
@@ -56,11 +59,13 @@ class TableEntry {
 		/*-------------------------------------------------*/
 
 		TableEntry(string key){
+
+			this->key = key;
 		}
 
 
 		/*-------------------------------------------------*/
-		/*		      TableEntry		   */
+		/*		TableEntry (constructor3)	   */
 		/*-------------------------------------------------*/
 		/*						   */
 		/* DESCRIPCION:					   */
@@ -70,6 +75,8 @@ class TableEntry {
 		/*-------------------------------------------------*/
 
 		TableEntry(){
+
+			this->key = "";
 		}
 
 
@@ -86,6 +93,10 @@ class TableEntry {
 		/*-------------------------------------------------*/
 
 		friend bool operator==(const TableEntry<V> &te1, const TableEntry<V> &te2){
+
+			bool result;
+			(te1.key.compare(te2.key) == 0) ? (result = 1) : (result = 0);
+			return result;
 		}
 
 
@@ -102,6 +113,10 @@ class TableEntry {
                 /*-------------------------------------------------*/
 
 		friend bool operator!=(const TableEntry<V> &te1, const TableEntry<V> &te2){
+
+			bool result;
+                        (te1.key.compare(te2.key) != 0) ? (result = 1) : (result = 0);
+                        return result;
 		}
 
 
@@ -116,7 +131,42 @@ class TableEntry {
                 /*                                                 */
                 /*-------------------------------------------------*/
 
-		friend ostream&operator<<(ostream &out, const TableEntry<V> &te){
+		friend ostream& operator<<(ostream &out, const TableEntry<V> &te){
+
+			out << "('" << te.key << "' => " << te.value << ")";
+			return out;
+		}
+
+
+		/*--------------------------------------------------*/
+		/*                     operator <	            */
+		/*--------------------------------------------------*/
+		/*                                                  */
+		/* DESCRIPCION:                                     */
+		/* Sobrecarga global del operador < para comparar el*/
+		/* contenido de dos TableEntry.                     */
+		/*                                                  */
+		/*--------------------------------------------------*/
+
+		friend bool operator< (const TableEntry<V> &te1, const TableEntry<V> &te2) {
+
+			return (te1.key < te2.key) ? (1) : (0);
+		}
+
+
+		/*--------------------------------------------------*/
+		/*                     operator >	            */
+		/*--------------------------------------------------*/
+		/*                                                  */
+		/* DESCRIPCION:                                     */
+		/* Sobrecarga global del operador > para comparar   */
+		/* el contenido de dos TableEntry.                  */
+		/*                                                  */
+		/*--------------------------------------------------*/
+
+		friend bool operator> (const TableEntry<V> &te1, const TableEntry<V> &te2) {
+
+			return (te1.key > te2.key) ? (1) : (0);
 		}
 
 };
