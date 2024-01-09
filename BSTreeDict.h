@@ -31,7 +31,7 @@ class BSTreeDict : public Dict<V> {
 		/*------------------- INSERT ----------------------*/
 		void insert(string key, V value) override {
 
-			tree->insert(TableEntry<V> (key, value );
+			tree->insert(TableEntry<V> (key, value) );
 		}
 		/*-------------------------------------------------*/
 
